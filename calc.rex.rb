@@ -61,7 +61,7 @@ class Calc < Racc::Parser
         ;
 
       when (text = @ss.scan(/[\d+[\.(\d+)]?]/))
-         action { [:ID, /\./ =~ text ? text.to_f : text.to_i] }
+         action { [:ID, text.to_f] }
 
       when (text = @ss.scan(/\*/))
          action { [:AST, ''] }
