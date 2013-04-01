@@ -53,7 +53,8 @@ post '/' do
   json["events"].map {|e|
     text = e["message"]["text"]
     if /\A[\d(].*[\d)]\z/m =~ text
-      to_sexpstr(text)
+      val, str, memo = to_sexpstr(text)
+      ([str] + memo).join "\n"
     else
       ''
     end

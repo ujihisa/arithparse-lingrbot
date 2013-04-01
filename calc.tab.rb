@@ -9,7 +9,7 @@ require 'racc/parser.rb'
 require './calc.rex'
 class Calc < Racc::Parser
 
-module_eval(<<'...end calc.racc/module_eval...', 'calc.racc', 18)
+module_eval(<<'...end calc.racc/module_eval...', 'calc.racc', 28)
 
 ...end calc.racc/module_eval...
 ##### State transition tables begin ###
@@ -48,7 +48,7 @@ racc_reduce_table = [
   3, 9, :_reduce_2,
   3, 9, :_reduce_3,
   3, 9, :_reduce_4,
-  1, 9, :_reduce_none ]
+  1, 9, :_reduce_5 ]
 
 racc_reduce_n = 6
 
@@ -103,25 +103,37 @@ Racc_debug_parser = false
 
 # reduce 1 omitted
 
-module_eval(<<'.,.,', 'calc.racc', 9)
-  def _reduce_2(val, _values)
-     "(+ #{val[0]} #{val[2]})" 
-  end
-.,.,
-
 module_eval(<<'.,.,', 'calc.racc', 10)
-  def _reduce_3(val, _values)
-     "(* #{val[0]} #{val[2]})" 
+  def _reduce_2(val, _values)
+                  x_val, x_str, x_memo = val[0]
+              y_val, y_str, y_memo = val[2]
+              memo = "(+ #{x_val} #{y_val}) => #{x_val + y_val}"
+              [x_val + y_val, "(+ #{x_str} #{y_str})", x_memo + y_memo + [memo]]
+            
   end
 .,.,
 
-module_eval(<<'.,.,', 'calc.racc', 11)
+module_eval(<<'.,.,', 'calc.racc', 16)
+  def _reduce_3(val, _values)
+                  x_val, x_str, x_memo = val[0]
+              y_val, y_str, y_memo = val[2]
+              memo = "(* #{x_val} #{y_val}) => #{x_val * y_val}"
+              [x_val * y_val, "(* #{x_str} #{y_str})", x_memo + y_memo + [memo]]
+            
+  end
+.,.,
+
+module_eval(<<'.,.,', 'calc.racc', 21)
   def _reduce_4(val, _values)
      val[1] 
   end
 .,.,
 
-# reduce 5 omitted
+module_eval(<<'.,.,', 'calc.racc', 22)
+  def _reduce_5(val, _values)
+     [val[0], val[0], []] 
+  end
+.,.,
 
 def _reduce_none(val, _values)
   val[0]

@@ -7,10 +7,20 @@ class Calc
 rule
   target  : exp
 
-  exp     : exp PLS exp { "(+ #{val[0]} #{val[2]})" }
-          | exp AST exp { "(* #{val[0]} #{val[2]})" }
+  exp     : exp PLS exp {
+              x_val, x_str, x_memo = val[0]
+              y_val, y_str, y_memo = val[2]
+              memo = "(+ #{x_val} #{y_val}) => #{x_val + y_val}"
+              [x_val + y_val, "(+ #{x_str} #{y_str})", x_memo + y_memo + [memo]]
+            }
+          | exp AST exp {
+              x_val, x_str, x_memo = val[0]
+              y_val, y_str, y_memo = val[2]
+              memo = "(* #{x_val} #{y_val}) => #{x_val * y_val}"
+              [x_val * y_val, "(* #{x_str} #{y_str})", x_memo + y_memo + [memo]]
+            }
           | L_PAREN exp R_PAREN { val[1] }
-          | ID
+          | ID { [val[0], val[0], []] }
 end
 ---- header ----
 require './calc.rex'
