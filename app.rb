@@ -54,6 +54,9 @@ post '/' do
     text = e["message"]["text"]
     if /\A[\d(].*[\d)]\z/m =~ text
       val, str, memo = to_sexpstr(text)
+      memo = memo.size < 10 ?
+        memo :
+        (memo.take(3) + ['...'] + memo.last(3))
       ([str] + memo).join "\n"
     else
       ''
