@@ -1,0 +1,24 @@
+class Calc
+  prechigh
+    left AST
+    left PLS
+  preclow
+  options no_result_var
+rule
+  target  : exp
+
+  exp     : exp PLS exp { "(+ #{val[0]} #{val[2]})" }
+          | exp AST exp { "(* #{val[0]} #{val[2]})" }
+          | '(' exp ')' { val[1] }
+          | ID
+end
+---- header ----
+require './calc.rex'
+---- inner ----
+---- footer ----
+c = Calc.new
+begin
+  p c.scan_str('1 + 2 * 3')
+rescue ParseError
+  puts 'parse error'
+end
