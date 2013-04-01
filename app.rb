@@ -43,7 +43,7 @@ def to_sexpstr(str)
   begin
     c.scan_str(str)
   rescue ParseError
-    ''
+    nil
   end
 end
 
@@ -55,12 +55,14 @@ post '/' do
     case
     when /\A[\d(].*[\d)]\z/m =~ text
       val, str, memo = to_sexpstr(text)
+      next '' unless val
       memo = memo.size < 10 ?
         memo :
         (memo.take(3) + ['...'] + memo.last(3))
       ([str] + memo).join "\n"
     when /\A!calc (.*)\z/m =~ text
       val, str, memo = to_sexpstr($1)
+      next '' unless val
       (([str] + memo).join "\n")[0...999]
     else
       ''
