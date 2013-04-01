@@ -59,8 +59,8 @@ racc_token_table = {
   :error => 1,
   :AST => 2,
   :PLS => 3,
-  "(" => 4,
-  ")" => 5,
+  :L_PAREN => 4,
+  :R_PAREN => 5,
   :ID => 6 }
 
 racc_nt_base = 7
@@ -88,8 +88,8 @@ Racc_token_to_s_table = [
   "error",
   "AST",
   "PLS",
-  "\"(\"",
-  "\")\"",
+  "L_PAREN",
+  "R_PAREN",
   "ID",
   "$start",
   "target",
