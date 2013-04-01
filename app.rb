@@ -52,12 +52,16 @@ post '/' do
   json = JSON.parse(request.body.string)
   json["events"].map {|e|
     text = e["message"]["text"]
-    if /\A[\d(].*[\d)]\z/m =~ text
+    case
+    when /\A[\d(].*[\d)]\z/m =~ text
       val, str, memo = to_sexpstr(text)
       memo = memo.size < 10 ?
         memo :
         (memo.take(3) + ['...'] + memo.last(3))
       ([str] + memo).join "\n"
+    when /\A!calc (.*)\z/m =~ text
+      val, str, memo = to_sexpstr($1)
+      (([str] + memo).join "\n")[0...999]
     else
       ''
     end
