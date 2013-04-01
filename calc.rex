@@ -1,7 +1,7 @@
 class Calc
 macro
   WHITESPACE \s+
-  ID [\d+[\.(\d+)]?]
+  ID \d+(\.\d+)?
 rule
   {WHITESPACE}
   {ID} { [:ID, text.to_f] }
