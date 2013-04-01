@@ -2,7 +2,7 @@ require 'sinatra'
 require 'json'
 
 get '/' do
-  {ruby_version: RUBY_VERSION, author: 'Tatsuhiro Ujihisa'}
+  {ruby_version: RUBY_VERSION, author: 'Tatsuhiro Ujihisa'}.inspect
 end
 
 post '/' do
