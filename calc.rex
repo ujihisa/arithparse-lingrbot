@@ -4,7 +4,7 @@ macro
   ID \d+(\.\d+)?
 rule
   {WHITESPACE}
-  {ID} { [:ID, text.to_f] }
+  {ID} { [:ID, (/\./ =~ text ? text.to_f : text.to_i)] }
   \* { [:AST, ''] }
   \+ { [:PLS, ''] }
   \( { [:L_PAREN, ''] }
