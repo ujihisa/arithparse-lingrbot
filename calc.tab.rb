@@ -129,9 +129,9 @@ end
 
 end   # class Calc
 
-c = Calc.new
-begin
-  p c.scan_str('1 + 2 * 3')
-rescue ParseError
-  puts 'parse error'
-end
+#c = Calc.new
+#begin
+#  p c.scan_str('1 + 2 * 3')
+#rescue ParseError
+#  puts 'parse error'
+#end

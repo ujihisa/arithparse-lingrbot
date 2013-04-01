@@ -1,40 +1,50 @@
 require 'sinatra'
 require 'json'
-require 'strscan'
+#require 'strscan'
 
 get '/' do
   {ruby_version: RUBY_VERSION, author: 'Tatsuhiro Ujihisa'}.inspect
 end
 
-Token = Struct.new(:type, :value)
-def lex(str)
-  s = StringScanner.new(str)
-  memo = []
-  until s.eos?
-    case
-    when x = s.scan(/\d+/)
-      memo << Token.new(:id, x.to_i)
-    when x = s.scan(/\(/)
-      memo << Token.new(:l_paren)
-    when x = s.scan(/\)/)
-      memo << Token.new(:r_paren)
-    when x = s.scan(/\+/)
-      memo << Token.new(:pls)
-    when x = s.scan(/\*/)
-      memo << Token.new(:ast)
-    when x = s.scan(/\s+/)
-      memo << Token.new(:whitespace)
-    else
-      warn "must not happen: #{s}"
-    end
-  end
-  memo
-end
+#Token = Struct.new(:type, :value)
+#def lex(str)
+#  s = StringScanner.new(str)
+#  memo = []
+#  until s.eos?
+#    case
+#    when x = s.scan(/\d+/)
+#      memo << Token.new(:id, x.to_i)
+#    when x = s.scan(/\(/)
+#      memo << Token.new(:l_paren)
+#    when x = s.scan(/\)/)
+#      memo << Token.new(:r_paren)
+#    when x = s.scan(/\+/)
+#      memo << Token.new(:pls)
+#    when x = s.scan(/\*/)
+#      memo << Token.new(:ast)
+#    when x = s.scan(/\s+/)
+#      memo << Token.new(:whitespace)
+#    else
+#      warn "must not happen: #{s}"
+#    end
+#  end
+#  memo
+#end
 
-def parse(tokens)
-  # not implemented yet!
-  tokens = tokens.reject {|s| s.type == :whitespace }
-  tokens.map {|t| "#{t.type}(#{t.value})" }.join
+#def parse(tokens)
+#  # not implemented yet!
+#  tokens = tokens.reject {|s| s.type == :whitespace }
+#  tokens.map {|t| "#{t.type}(#{t.value})" }.join
+#end
+
+require './calc.tab'
+def to_sexpstr(str)
+  c = Calc.new
+  begin
+    c.scan_str(str)
+  rescue ParseError
+    ''
+  end
 end
 
 post '/' do
@@ -43,8 +53,7 @@ post '/' do
   json["events"].map {|e|
     text = e["message"]["text"]
     if /\A[\d(].*[\d)]\z/m =~ text
-      tokens = lex(text)
-      parse(tokens).inspect
+      to_sexpstr(text)
     else
       ''
     end
